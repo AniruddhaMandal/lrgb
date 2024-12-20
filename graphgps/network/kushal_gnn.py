@@ -81,7 +81,7 @@ class MolGNN(nn.Module):
         self.gnn_convs = nn.ModuleList()
         self.lns = nn.ModuleList()
         self.batch_size = cfg.train.batch_size
-        self.batch_frac = 0.6#cfg.train.batch_frac
+        self.batch_frac = cfg.gnn.dropout #cfg.train.batch_frac
         self.name = 'gcn'
         # classifier layer
         self.cls = nn.Linear(self.hidden_dim, self.output_dim)
@@ -112,6 +112,12 @@ class MolGNN(nn.Module):
         
     def forward(self, batch_loader):
 
+        #print("batch_loader:",batch_loader,"\n")
+        #print("X:", batch_loader.x,"\n")
+        #print("edge_attr:",batch_loader.edge_attr,"\n")
+        #print("edge_index:",batch_loader.edge_index,"\n")
+        #print("Y:",batch_loader.y,"\n")
+        #exit()
         x = batch_loader.x
         edge_index = batch_loader.edge_index
         batch = batch_loader.batch
@@ -152,7 +158,7 @@ class MolGNN(nn.Module):
         x = self.cls(x)
 
         embedding = x
-        x = F.log_softmax(x, dim = 1)
+        #x = F.log_softmax(x, dim = 1)
         return x,y
 
 
